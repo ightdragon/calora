@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Metrics</title>
+  <style>
+    body { font-family:system-ui,sans-serif; background:#fffaf4; margin:0; padding:40px; color:#333; }
+    .container {
+      max-width:400px; margin:auto; background:#fff; border:1px solid #eee;
+      padding:30px; border-radius:14px; box-shadow:0 2px 4px rgba(0,0,0,0.05);
+    }
+    h2 { color:#ff9500; text-align:center; }
+    input, select {
+      width:100%; padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:8px;
+      font-size:16px;
+    }
+    button {
+      width:100%; background:#ff9500; color:#fff; border:none; border-radius:8px;
+      padding:12px; font-size:16px; cursor:pointer; margin-top:10px;
+    }
+    button:hover { background:#e28300; }
+    a { color:#ff9500; text-decoration:none; display:block; text-align:center; margin-top:15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Update Your Body Metrics</h2>
+    <form method="post">
+      <label>Gender</label>
+<select name="gender" required>
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+</select>
+      <option value="male" {% if user_data.gender == 'male' %}selected{% endif %}>Male</option>
+      <option value="female" {% if user_data.gender == 'female' %}selected{% endif %}>Female</option>
+
+      <label>Age</label>
+      <input type="number" name="age" value="{{ user_data.age }}" required>
+
+      <label>Height (cm)</label>
+      <input type="number" name="height" value="{{ user_data.height }}" required>
+
+      <label>Weight (kg)</label>
+      <input type="number" name="weight" value="{{ user_data.weight }}" required>
+
+      <label>Activity</label>
+      <select name="activity" required>
+        <option value="sedentary" {% if user_data.activity == 'sedentary' %}selected{% endif %}>Sedentary</option>
+        <option value="light" {% if user_data.activity == 'light' %}selected{% endif %}>Lightly active</option>
+        <option value="moderate" {% if user_data.activity == 'moderate' %}selected{% endif %}>Moderately active</option>
+        <option value="active" {% if user_data.activity == 'active' %}selected{% endif %}>Very active</option>
+        <option value="very" {% if user_data.activity == 'very' %}selected{% endif %}>Extremely active</option>
+      </select>
+
+      <button type="submit">Save</button>
+    </form>
+    <a href="/dashboard">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables and secrets
+*.env
+.env.*
+.DS_Store
+
+# Auth0 or API keys
+config.json
+credentials.json
+*.pem
+*.key
+
+# SQLite database
+*.db
+*.sqlite3
+
+# Flask cache and logs
+instance/
+*.log
+
+# Node/Frontend (if you ever add React/JS build)
+node_modules/
+dist/
+build/
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# MacOS junk
+.DS_Store

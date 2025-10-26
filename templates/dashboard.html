@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calora Dashboard</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background:#fffaf4; margin:0; padding:20px; color:#333; }
+    header {
+      display:flex; justify-content:space-between; align-items:center;
+      background:#ff9500; color:#fff; padding:14px 22px; border-radius:12px;
+    }
+    h1 { margin:0; font-size:24px; }
+    a.logout {
+      color:#fff; text-decoration:none; background:rgba(255,255,255,0.2);
+      padding:6px 14px; border-radius:8px; transition:background 0.2s;
+    }
+    a.logout:hover { background:rgba(255,255,255,0.3); }
+
+    main { margin-top:30px; display:flex; flex-wrap:wrap; gap:30px; }
+
+    .card {
+      background:#fff; border:1px solid #eee; border-radius:14px;
+      padding:18px; box-shadow:0 2px 4px rgba(0,0,0,0.05);
+      flex:1; min-width:300px;
+    }
+    table {
+      width:100%; border-collapse:collapse; margin-top:10px;
+    }
+    th, td {
+      border:1px solid #eee; padding:8px; text-align:center;
+    }
+    th { background:#ff9500; color:#fff; }
+
+    input, button {
+      font-size:16px; border-radius:10px;
+    }
+    #userInput {
+      flex:1; padding:12px 14px; border:1px solid #ccc; outline:none;
+    }
+    #sendBtn {
+      background:#ff9500; color:#fff; border:none; padding:12px 22px; cursor:pointer;
+    }
+    #sendBtn:hover { background:#e28300; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome, {{ user.name }}</h1>
+    <a href="/logout" class="logout">Logout</a>
+  </header>
+
+  <main>
+    <!-- Meal logging -->
+    <div class="card" style="flex:2;">
+      <h2>Log a Meal</h2>
+      <div style="display:flex;align-items:center;gap:10px;margin:12px 0;">
+        <input id="userInput" type="text" placeholder="e.g., 2 rotis and paneer curry">
+        <button id="sendBtn">Log</button>
+      </div>
+      <div id="responseBox" style="white-space:pre-wrap;font-family:monospace;"></div>
+
+      
+      <h3>Meal History</h3>
+<table id="mealTable">
+  <tr><th>Meal</th><th>Calories</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>Action</th></tr>
+  {% for meal, cal, p, c, f, id in logs %}
+  <tr data-id="{{ id }}">
+    <td>{{ meal }}</td>
+    <td>{{ cal }}</td>
+    <td>{{ p }}</td>
+    <td>{{ c }}</td>
+    <td>{{ f }}</td>
+    <td>
+      <button class="deleteBtn"
+              style="background:#ff4d4d;color:#fff;border:none;border-radius:6px;
+                     padding:4px 8px;cursor:pointer;">✕</button>
+    </td>
+  </tr>
+{% endfor %}
+
+</table>
+
+    </div>
+
+    <!-- Totals + TDEE -->
+  <div class="card" style="max-width:320px;">
+  <h2>Today's Overview</h2>
+  <p><strong>Calories:</strong> {{ totals.calories | round(1) }}</p>
+  <p><strong>Protein:</strong> {{ totals.protein | round(1) }} g</p>
+  <p><strong>Carbs:</strong> {{ totals.carbs | round(1) }} g</p>
+  <p><strong>Fat:</strong> {{ totals.fat | round(1) }} g</p>
+  <hr>
+  {% if tdee %}
+    <p><strong>TDEE:</strong> {{ tdee | round(1) }} kcal / day</p>
+    <p><strong>Remaining:</strong> {{ (tdee - totals.calories) | round(1) }} kcal</p>
+    <p><strong>Current Weight:</strong> {{ weight | round(1) }} kg</p>
+  {% else %}
+    <p>No TDEE yet.</p>
+  {% endif %}
+  <form action="/register" method="get" style="margin-top:10px;">
+    <button type="submit"
+            style="background:#ff9500;color:#fff;border:none;
+                   border-radius:8px;padding:8px 14px;cursor:pointer;">
+      Update Metrics
+    </button>
+  </form>
+</div>
+
+  </main>
+
+</body>
+<!-- Loading overlay -->
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Dashboard loaded");
+
+  const sendBtn = document.getElementById("sendBtn");
+
+  sendBtn.onclick = async () => {
+    const msg = document.getElementById("userInput").value.trim();
+    if (!msg) return;
+
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Request timed out after 10 seconds")), 10000)
+    );
+
+    const fetchRequest = fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: msg })
+    });
+
+    try {
+      const res = await Promise.race([fetchRequest, timeout]);
+      if (!res.ok) throw new Error("Server error: " + res.status);
+
+      const data = await res.json();
+      console.log("Response:", data);
+
+      if (data.error) {
+        alert("Error: " + data.error);
+        return;
+      }
+
+      document.getElementById("responseBox").textContent = JSON.stringify(data, null, 2);
+      setTimeout(() => location.reload(), 1000);
+    } catch (err) {
+      console.error("Request failed:", err);
+      alert(err.message);
+    }
+  };
+});
+</script>
+
+
+
+</html>

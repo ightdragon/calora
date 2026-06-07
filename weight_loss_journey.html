@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Weight Loss Journey</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Oswald:wght@700&display=swap');
+
+  :root {
+    --panel-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    --glow-gold: 0 0 30px rgba(255,200,0,0.8), 0 0 60px rgba(255,150,0,0.4);
+    --glow-red: 0 0 30px rgba(255,50,50,0.8), 0 0 60px rgba(200,0,0,0.4);
+    --glow-green: 0 0 30px rgba(0,255,100,0.8), 0 0 60px rgba(0,180,50,0.4);
+    --glow-blue: 0 0 30px rgba(0,150,255,0.8), 0 0 60px rgba(0,80,200,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    font-family: 'Comic Neue', cursive;
+    overflow-x: hidden;
+  }
+
+  /* ─── TITLE PAGE ─── */
+  .title-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0a0a 70%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .title-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(255,100,0,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 50%, rgba(0,150,255,0.15) 0%, transparent 50%);
+    animation: bgPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+  }
+
+  .title-text {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3rem, 10vw, 7rem);
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow:
+      0 0 20px rgba(255,200,0,1),
+      0 0 40px rgba(255,150,0,0.8),
+      0 0 80px rgba(255,100,0,0.4),
+      4px 4px 0 #c00,
+      8px 8px 0 #600;
+    animation: titlePop 1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    text-align: center;
+    line-height: 1.1;
+    z-index: 1;
+  }
+
+  @keyframes titlePop {
+    from { transform: scale(0) rotate(-10deg); opacity: 0; }
+    to { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .title-sub {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.8rem);
+    color: #ffd700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-top: 16px;
+    animation: fadeSlideUp 1.2s 0.5s both;
+    z-index: 1;
+    text-shadow: 0 0 20px rgba(255,215,0,0.8);
+  }
+
+  @keyframes fadeSlideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    font-family: 'Oswald', sans-serif;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    animation: bounce 2s 2s infinite, fadeSlideUp 1s 2s both;
+    z-index: 1;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  /* ─── PANELS ─── */
+  .panel {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-inner {
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    z-index: 2;
+  }
+
+  /* Panel backgrounds */
+  .panel-1 { background: linear-gradient(160deg, #1a0000 0%, #3d0000 40%, #1a0a0a 100%); }
+  .panel-2 { background: linear-gradient(160deg, #0a0a2e 0%, #1a1a6e 40%, #0a1a3e 100%); }
+  .panel-3 { background: linear-gradient(160deg, #001a2e 0%, #003d6e 40%, #001a4e 100%); }
+  .panel-4 { background: linear-gradient(160deg, #001a0a 0%, #004d1a 40%, #001a10 100%); }
+  .panel-5 { background: linear-gradient(160deg, #1a0a3d 0%, #3d1a6e 40%, #1a0a4e 100%); }
+  .panel-6 { background: linear-gradient(160deg, #2a1a00 0%, #6e4a00 40%, #4e2a00 100%); }
+  .panel-7 { background: linear-gradient(160deg, #001a0a 0%, #006622 60%, #001a0a 100%); }
+
+  /* Panel number badge */
+  .panel-badge {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: rgba(255,255,255,0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  /* ─── SCENE LABELS ─── */
+  .scene-label {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2rem, 6vw, 4rem);
+    letter-spacing: 2px;
+    text-align: center;
+    line-height: 1.1;
+    animation: labelSlam 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  @keyframes labelSlam {
+    0% { transform: scale(3); opacity: 0; }
+    60% { transform: scale(0.9); }
+    80% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .panel-1 .scene-label { color: #ff4444; text-shadow: var(--glow-red), 3px 3px 0 #800; }
+  .panel-2 .scene-label { color: #6699ff; text-shadow: var(--glow-blue), 3px 3px 0 #003; }
+  .panel-3 .scene-label { color: #44aaff; text-shadow: var(--glow-blue), 3px 3px 0 #003; }
+  .panel-4 .scene-label { color: #44ff88; text-shadow: var(--glow-green), 3px 3px 0 #003; }
+  .panel-5 .scene-label { color: #dd88ff; text-shadow: 0 0 30px rgba(200,100,255,0.8), 3px 3px 0 #300; }
+  .panel-6 .scene-label { color: #ffcc44; text-shadow: var(--glow-gold), 3px 3px 0 #600; }
+  .panel-7 .scene-label { color: #44ff88; text-shadow: var(--glow-green), 3px 3px 0 #030; }
+
+  /* ─── SVG ILLUSTRATIONS ─── */
+  .illustration {
+    width: 100%;
+    max-width: 500px;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.8));
+  }
+
+  /* Panel 1 — sad overweight boy */
+  .boy-body-fat {
+    animation: sadSway 3s ease-in-out infinite;
+    transform-origin: 230px 380px;
+  }
+  @keyframes sadSway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+  .tears {
+    animation: tearFall 1.5s ease-in infinite;
+  }
+  @keyframes tearFall {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(30px); opacity: 0; }
+  }
+  .tummy-wobble {
+    animation: wobble 0.8s ease-in-out infinite alternate;
+    transform-origin: 230px 300px;
+  }
+  @keyframes wobble {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(1.04); }
+  }
+
+  /* Panel 2 — realization flash */
+  .lightbulb {
+    animation: bulbFlash 1.2s ease-in-out infinite;
+  }
+  @keyframes bulbFlash {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(2) drop-shadow(0 0 20px #ffdd00); }
+  }
+  .thought-bubble {
+    animation: thoughtPop 2s ease-in-out infinite;
+  }
+  @keyframes thoughtPop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Panel 3 — computer research */
+  .screen-glow {
+    animation: screenFlicker 3s ease-in-out infinite;
+  }
+  @keyframes screenFlicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.7; }
+    94% { opacity: 1; }
+    96% { opacity: 0.8; }
+    97% { opacity: 1; }
+  }
+  .cursor {
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+  .search-text {
+    animation: typewriter 4s steps(20) infinite;
+  }
+
+  /* Panel 4 — research cards */
+  .research-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .research-card {
+    background: rgba(0,0,0,0.5);
+    border-radius: 16px;
+    padding: 24px 20px;
+    border: 2px solid rgba(68,255,136,0.3);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+
+  .research-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(68,255,136,0.05) 0%, transparent 60%);
+  }
+
+  .research-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(68,255,136,0.7);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(68,255,136,0.3);
+  }
+
+  .research-card:nth-child(1) { animation: cardReveal 0.5s 0.1s both; }
+  .research-card:nth-child(2) { animation: cardReveal 0.5s 0.3s both; }
+  .research-card:nth-child(3) { animation: cardReveal 0.5s 0.5s both; }
+  .research-card:nth-child(4) { animation: cardReveal 0.5s 0.7s both; }
+
+  @keyframes cardReveal {
+    from { transform: translateY(40px) scale(0.9); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    display: block;
+    animation: iconBounce 2s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes iconBounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(5deg); }
+  }
+
+  .card-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    color: #44ff88;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .card-body {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.6;
+  }
+
+  .card-highlight {
+    display: inline-block;
+    background: rgba(68,255,136,0.15);
+    border: 1px solid rgba(68,255,136,0.4);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-weight: 700;
+    color: #44ff88;
+    margin-top: 6px;
+    font-size: 0.95rem;
+  }
+
+  /* Panel 5 — food scale */
+  .scale-beam {
+    animation: scaleBalance 2s ease-in-out infinite;
+    transform-origin: 230px 210px;
+  }
+  @keyframes scaleBalance {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  .price-tag {
+    animation: tagSwing 1s ease-in-out infinite;
+    transform-origin: 310px 120px;
+  }
+  @keyframes tagSwing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  /* Panel 6 — measuring food */
+  .food-item {
+    animation: foodFloat 2s ease-in-out infinite;
+  }
+  @keyframes foodFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .number-count {
+    animation: countUp 2s ease-out infinite;
+    font-family: 'Bangers', cursive;
+    fill: #ffcc44;
+  }
+  @keyframes countUp {
+    0% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0.3; transform: scale(0.8); }
+  }
+
+  /* Panel 7 — weight loss transformation */
+  .slim-boy {
+    animation: triumphPose 1.5s ease-in-out infinite alternate;
+    transform-origin: 230px 350px;
+  }
+  @keyframes triumphPose {
+    from { transform: translateY(0) scale(1); }
+    to { transform: translateY(-15px) scale(1.03); }
+  }
+  .sparkle {
+    animation: sparklePop 1.5s ease-in-out infinite;
+  }
+  .sparkle:nth-child(2) { animation-delay: 0.3s; }
+  .sparkle:nth-child(3) { animation-delay: 0.6s; }
+  .sparkle:nth-child(4) { animation-delay: 0.9s; }
+  @keyframes sparklePop {
+    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1.4) rotate(180deg); opacity: 1; }
+  }
+  .energy-ring {
+    animation: ringExpand 2s ease-out infinite;
+    transform-origin: center;
+  }
+  @keyframes ringExpand {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  /* ─── CAPTION BOXES ─── */
+  .caption {
+    background: rgba(0,0,0,0.7);
+    border-radius: 12px;
+    padding: 18px 28px;
+    border-left: 5px solid;
+    max-width: 600px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    animation: captionSlide 0.8s 0.3s both;
+  }
+
+  @keyframes captionSlide {
+    from { transform: translateX(-40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .panel-1 .caption { border-color: #ff4444; }
+  .panel-2 .caption { border-color: #6699ff; }
+  .panel-3 .caption { border-color: #44aaff; }
+  .panel-5 .caption { border-color: #dd88ff; }
+  .panel-6 .caption { border-color: #ffcc44; }
+  .panel-7 .caption { border-color: #44ff88; }
+
+  .caption p {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: rgba(255,255,255,0.9);
+    line-height: 1.7;
+    font-weight: 700;
+  }
+
+  /* ─── DRAMATIC BG EFFECTS ─── */
+  .speed-lines {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background: repeating-conic-gradient(from 0deg at 50% 50%, #fff 0deg, transparent 1deg, transparent 5deg);
+    animation: spinLines 20s linear infinite;
+  }
+  @keyframes spinLines { to { transform: rotate(360deg); } }
+
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  .halftone {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff4444, #ffcc44, #44ff88);
+    box-shadow: 0 0 10px rgba(255,200,100,0.8);
+    transition: width 0.1s;
+    z-index: 999;
+  }
+
+  /* ─── PANEL DIVIDERS ─── */
+  .divider {
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    position: relative;
+  }
+  .divider::after {
+    content: '✦ ✦ ✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    letter-spacing: 8px;
+    white-space: nowrap;
+  }
+
+  /* ─── FLAME EFFECT ─── */
+  .flame {
+    animation: flameFlicker 0.3s ease-in-out infinite alternate;
+  }
+  @keyframes flameFlicker {
+    from { transform: scaleY(1) scaleX(1); }
+    to { transform: scaleY(1.05) scaleX(0.97); }
+  }
+
+  /* ─── SCROLL INDICATOR ─── */
+  @media print {
+    .progress-bar, .scroll-hint { display: none; }
+    .panel { page-break-after: always; min-height: auto; padding: 40px; }
+    body { background: white; }
+    .speed-lines, .vignette, .halftone { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ═══════════════════════ TITLE PAGE ═══════════════════════ -->
+<div class="title-page">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <h1 class="title-text">THE WEIGHT<br>LOSS JOURNEY</h1>
+  <p class="title-sub">A Story of Transformation</p>
+  <div class="scroll-hint">▼ &nbsp; SCROLL DOWN &nbsp; ▼</div>
+</div>
+
+<!-- ═══════════════════════ PANEL 1 ═══════════════════════ -->
+<div class="panel panel-1">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">1</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label">THE BURDEN</h2>
+
+    <svg class="illustration" viewBox="0 0 460 440" xmlns="http://www.w3.org/2000/svg">
+      <!-- Dramatic BG burst -->
+      <defs>
+        <radialGradient id="bgBurst1" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#ff2200" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#1a0000" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="shadow">
+          <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.7"/>
+        </filter>
+        <filter id="glow-red">
+          <feGaussianBlur stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <ellipse cx="230" cy="220" rx="200" ry="200" fill="url(#bgBurst1)"/>
+
+      <g class="boy-body-fat" filter="url(#shadow)">
+        <!-- Shadow on ground -->
+        <ellipse cx="230" cy="430" rx="100" ry="14" fill="rgba(0,0,0,0.5)"/>
+        <!-- Legs fat -->
+        <ellipse cx="196" cy="370" rx="32" ry="55" fill="#f0b070"/>
+        <ellipse cx="264" cy="370" rx="32" ry="55" fill="#e8a060"/>
+        <!-- Shoes -->
+        <ellipse cx="190" cy="418" rx="38" ry="16" fill="#333"/>
+        <ellipse cx="270" cy="418" rx="38" ry="16" fill="#222"/>
+        <!-- Body / torso large -->
+        <g class="tummy-wobble">
+          <ellipse cx="230" cy="295" rx="78" ry="88" fill="#f0b070"/>
+          <!-- Shirt -->
+          <ellipse cx="230" cy="280" rx="76" ry="70" fill="#cc3333"/>
+          <!-- Tummy bulge over belt -->
+          <ellipse cx="230" cy="348" rx="70" ry="28" fill="#f0b070"/>
+          <!-- Belt -->
+          <rect x="162" y="338" width="136" height="18" rx="6" fill="#553300"/>
+          <rect x="222" y="340" width="16" height="14" rx="3" fill="#996600"/>
+        </g>
+        <!-- Arms fat -->
+        <ellipse cx="150" cy="290" rx="22" ry="55" fill="#f0b070" transform="rotate(15 150 290)"/>
+        <ellipse cx="310" cy="290" rx="22" ry="55" fill="#e8a060" transform="rotate(-15 310 290)"/>
+        <!-- Hands on belly -->
+        <circle cx="165" cy="335" r="18" fill="#f0b070"/>
+        <circle cx="295" cy="335" r="18" fill="#e8a060"/>
+        <!-- Neck fat -->
+        <ellipse cx="230" cy="198" rx="38" ry="22" fill="#f0b070"/>
+        <!-- Head -->
+        <ellipse cx="230" cy="148" rx="68" ry="72" fill="#f5be80"/>
+        <!-- Hair -->
+        <ellipse cx="230" cy="90" rx="68" ry="36" fill="#3a2000"/>
+        <ellipse cx="165" cy="110" rx="22" ry="40" fill="#3a2000"/>
+        <ellipse cx="295" cy="110" rx="22" ry="40" fill="#3a2000"/>
+        <!-- Eyes sad -->
+        <ellipse cx="202" cy="145" rx="14" ry="12" fill="white"/>
+        <ellipse cx="258" cy="145" rx="14" ry="12" fill="white"/>
+        <circle cx="205" cy="148" r="8" fill="#3a2000"/>
+        <circle cx="261" cy="148" r="8" fill="#3a2000"/>
+        <!-- Pupils looking down -->
+        <circle cx="206" cy="151" r="4" fill="#111"/>
+        <circle cx="262" cy="151" r="4" fill="#111"/>
+        <!-- Sad eyebrows -->
+        <path d="M188 132 Q202 126 216 133" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M244 133 Q258 126 272 132" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- Mouth sad -->
+        <path d="M210 175 Q230 165 250 175" stroke="#a06040" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- Cheeks rosy fat -->
+        <ellipse cx="175" cy="165" rx="18" ry="12" fill="rgba(255,120,80,0.35)"/>
+        <ellipse cx="285" cy="165" rx="18" ry="12" fill="rgba(255,120,80,0.35)"/>
+        <!-- Tears -->
+        <g class="tears">
+          <ellipse cx="198" cy="162" rx="4" ry="7" fill="#aaddff"/>
+          <ellipse cx="265" cy="162" rx="4" ry="7" fill="#aaddff"/>
+        </g>
+        <!-- Arrow pointing at tummy -->
+        <path d="M340 320 Q370 310 365 340 L355 335 L360 345 L348 340 Z" fill="#ff4444" opacity="0.8"/>
+        <text x="348" y="305" text-anchor="middle" font-family="Bangers, cursive" font-size="18" fill="#ff4444">TUMMY!</text>
+      </g>
+
+      <!-- Thought bubble -->
+      <g class="thought-bubble">
+        <circle cx="80" cy="240" r="8" fill="rgba(255,255,255,0.15)" stroke="rgba(255,100,100,0.5)" stroke-width="2"/>
+        <circle cx="68" cy="220" r="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,100,100,0.5)" stroke-width="2"/>
+        <circle cx="55" cy="198" r="5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,100,100,0.5)" stroke-width="2"/>
+        <rect x="10" y="140" width="90" height="54" rx="16" fill="rgba(0,0,0,0.6)" stroke="rgba(255,100,100,0.5)" stroke-width="2"/>
+        <text x="55" y="162" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="11" fill="#ff8888" font-weight="bold">Why am I</text>
+        <text x="55" y="178" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="11" fill="#ff8888" font-weight="bold">like this? 😔</text>
+      </g>
+    </svg>
+
+    <div class="caption">
+      <p>Our boy stares down at his swelling belly, heart heavy with sorrow. The mirror never lies — and today, it's screaming.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PANEL 2 ═══════════════════════ -->
+<div class="panel panel-2">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">2</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label">THE AWAKENING</h2>
+
+    <svg class="illustration" viewBox="0 0 460 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="lightGlow" cx="50%" cy="20%">
+          <stop offset="0%" stop-color="#ffdd00" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#0a0a2e" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="bulbGlow">
+          <feGaussianBlur stdDeviation="12" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Light rays -->
+      <g opacity="0.25">
+        <line x1="230" y1="60" x2="80" y2="420" stroke="#ffdd00" stroke-width="30"/>
+        <line x1="230" y1="60" x2="160" y2="420" stroke="#ffdd00" stroke-width="20"/>
+        <line x1="230" y1="60" x2="300" y2="420" stroke="#ffdd00" stroke-width="20"/>
+        <line x1="230" y1="60" x2="380" y2="420" stroke="#ffdd00" stroke-width="30"/>
+      </g>
+
+      <!-- Lightbulb moment -->
+      <g class="lightbulb" filter="url(#bulbGlow)">
+        <ellipse cx="230" cy="62" rx="38" ry="44" fill="#fff9aa"/>
+        <path d="M208 95 Q210 114 230 118 Q250 114 252 95" fill="#fff176"/>
+        <rect x="218" y="118" width="24" height="8" rx="3" fill="#aaa"/>
+        <rect x="220" y="126" width="20" height="8" rx="3" fill="#999"/>
+        <!-- Shine -->
+        <ellipse cx="218" cy="50" rx="6" ry="10" fill="rgba(255,255,255,0.7)" transform="rotate(-20 218 50)"/>
+        <!-- Glow rings -->
+        <circle cx="230" cy="70" r="52" fill="none" stroke="#ffdd00" stroke-width="3" opacity="0.5"/>
+        <circle cx="230" cy="70" r="68" fill="none" stroke="#ffdd00" stroke-width="2" opacity="0.3"/>
+      </g>
+
+      <!-- Boy with determined look -->
+      <g filter="url(#shadow)">
+        <ellipse cx="230" cy="430" rx="90" ry="12" fill="rgba(0,0,0,0.4)"/>
+        <!-- Legs -->
+        <ellipse cx="200" cy="368" rx="28" ry="50" fill="#f0b070"/>
+        <ellipse cx="260" cy="368" rx="28" ry="50" fill="#e8a060"/>
+        <ellipse cx="195" cy="412" rx="34" ry="14" fill="#333"/>
+        <ellipse cx="265" cy="412" rx="34" ry="14" fill="#222"/>
+        <!-- Body -->
+        <ellipse cx="230" cy="285" rx="70" ry="80" fill="#f0b070"/>
+        <ellipse cx="230" cy="272" rx="68" ry="65" fill="#3355bb"/>
+        <ellipse cx="230" cy="340" rx="62" ry="24" fill="#f0b070"/>
+        <rect x="170" y="332" width="120" height="16" rx="5" fill="#553300"/>
+        <!-- Fist pump arm -->
+        <ellipse cx="305" cy="230" rx="20" ry="50" fill="#f0b070" transform="rotate(-40 305 230)"/>
+        <circle cx="325" cy="200" r="22" fill="#f0b070"/>
+        <!-- Other arm on waist -->
+        <ellipse cx="155" cy="295" rx="20" ry="45" fill="#f0b070" transform="rotate(20 155 295)"/>
+        <circle cx="163" cy="338" r="16" fill="#f0b070"/>
+        <!-- Head -->
+        <ellipse cx="230" cy="175" rx="62" ry="66" fill="#f5be80"/>
+        <ellipse cx="230" cy="116" rx="62" ry="32" fill="#3a2000"/>
+        <ellipse cx="172" cy="135" rx="20" ry="36" fill="#3a2000"/>
+        <ellipse cx="288" cy="135" rx="20" ry="36" fill="#3a2000"/>
+        <!-- Neck -->
+        <ellipse cx="230" cy="232" rx="32" ry="20" fill="#f0b070"/>
+        <!-- Eyes determined -->
+        <ellipse cx="205" cy="170" rx="13" ry="12" fill="white"/>
+        <ellipse cx="255" cy="170" rx="13" ry="12" fill="white"/>
+        <circle cx="208" cy="170" r="8" fill="#3a2000"/>
+        <circle cx="258" cy="170" r="8" fill="#3a2000"/>
+        <circle cx="210" cy="168" r="3.5" fill="#111"/>
+        <circle cx="260" cy="168" r="3.5" fill="#111"/>
+        <!-- Determined brows -->
+        <path d="M192 156 Q205 149 218 155" stroke="#3a2000" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M242 155 Q255 149 268 156" stroke="#3a2000" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <!-- Smile determined -->
+        <path d="M212 196 Q230 210 248 196" stroke="#a06040" stroke-width="3.5" fill="rgba(255,180,140,0.3)" stroke-linecap="round"/>
+        <!-- Cheeks -->
+        <ellipse cx="178" cy="186" rx="16" ry="10" fill="rgba(255,120,80,0.3)"/>
+        <ellipse cx="282" cy="186" rx="16" ry="10" fill="rgba(255,120,80,0.3)"/>
+      </g>
+
+      <!-- Speech bubble -->
+      <g class="thought-bubble">
+        <path d="M295 260 L330 260 L340 275 L330 240 Q330 220 355 220 L430 220 Q450 220 450 240 L450 290 Q450 310 430 310 L355 310 Q335 310 330 295 L320 300 Z" fill="rgba(255,255,255,0.9)" stroke="#6699ff" stroke-width="2"/>
+        <text x="390" y="256" text-anchor="middle" font-family="Bangers, cursive" font-size="17" fill="#333">THAT'S IT!</text>
+        <text x="390" y="276" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="11" fill="#555" font-weight="bold">I'm changing</text>
+        <text x="390" y="292" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="11" fill="#555" font-weight="bold">my life NOW!</text>
+      </g>
+    </svg>
+
+    <div class="caption">
+      <p>A lightning bolt of clarity — he REFUSES to stay this way. His health, his future, his LIFE depends on this moment. The decision is made.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PANEL 3 ═══════════════════════ -->
+<div class="panel panel-3">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">3</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label">THE DEEP DIVE</h2>
+
+    <svg class="illustration" viewBox="0 0 460 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="screenLight" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#0088ff" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="screenBlur">
+          <feGaussianBlur stdDeviation="3"/>
+        </filter>
+      </defs>
+
+      <!-- Desk -->
+      <rect x="60" y="340" width="340" height="18" rx="6" fill="#5a3a1a"/>
+      <rect x="90" y="358" width="12" height="60" rx="4" fill="#4a2a10"/>
+      <rect x="358" y="358" width="12" height="60" rx="4" fill="#4a2a10"/>
+
+      <!-- Monitor -->
+      <rect x="120" y="160" width="220" height="160" rx="10" fill="#111"/>
+      <rect x="124" y="164" width="212" height="152" rx="8" fill="#0a1a2e"/>
+      <!-- Screen glow -->
+      <ellipse cx="230" cy="240" rx="100" ry="75" fill="url(#screenLight)" class="screen-glow"/>
+      <!-- Screen content -->
+      <g class="screen-glow">
+        <rect x="134" y="172" width="140" height="8" rx="3" fill="#44aaff" opacity="0.8"/>
+        <rect x="134" y="185" width="200" height="5" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="134" y="195" width="180" height="5" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="134" y="205" width="195" height="5" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <!-- Search bar -->
+        <rect x="134" y="220" width="200" height="22" rx="5" fill="rgba(255,255,255,0.1)" stroke="#44aaff" stroke-width="1"/>
+        <text x="142" y="236" font-family="monospace" font-size="10" fill="#44aaff">weight loss science</text>
+        <rect x="326" y="222" width="8" height="18" rx="1" fill="#44aaff" class="cursor"/>
+        <!-- Results -->
+        <rect x="134" y="250" width="160" height="6" rx="2" fill="#44ff88" opacity="0.7"/>
+        <rect x="134" y="262" width="200" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+        <rect x="134" y="272" width="175" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+        <rect x="134" y="286" width="155" height="6" rx="2" fill="#44ff88" opacity="0.7"/>
+        <rect x="134" y="298" width="190" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+        <rect x="134" y="308" width="170" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+      </g>
+      <!-- Monitor stand -->
+      <rect x="218" y="320" width="24" height="22" rx="2" fill="#333"/>
+      <rect x="195" y="340" width="70" height="8" rx="3" fill="#444"/>
+
+      <!-- Books stack beside monitor -->
+      <rect x="360" y="265" width="50" height="12" rx="2" fill="#cc4444"/>
+      <rect x="358" y="253" width="48" height="12" rx="2" fill="#4444cc"/>
+      <rect x="361" y="241" width="46" height="12" rx="2" fill="#44cc44"/>
+      <text x="385" y="276" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="6" fill="white">TDEE</text>
+      <text x="382" y="264" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="6" fill="white">NUTRITION</text>
+      <text x="384" y="252" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="6" fill="white">SCIENCE</text>
+
+      <!-- Boy sitting at desk (simplified) -->
+      <g filter="url(#shadow)">
+        <!-- Chair -->
+        <rect x="172" y="335" width="70" height="12" rx="4" fill="#553300"/>
+        <!-- Torso leaning forward -->
+        <ellipse cx="215" cy="295" rx="42" ry="50" fill="#f0b070"/>
+        <ellipse cx="215" cy="283" rx="40" ry="42" fill="#2255aa"/>
+        <!-- Arm extended to keyboard -->
+        <path d="M255 295 Q295 305 310 330" stroke="#f0b070" stroke-width="22" fill="none" stroke-linecap="round"/>
+        <circle cx="310" cy="332" r="16" fill="#f0b070"/>
+        <!-- Other arm up thinking -->
+        <path d="M175 290 Q150 260 160 240" stroke="#f0b070" stroke-width="22" fill="none" stroke-linecap="round"/>
+        <circle cx="162" cy="236" r="16" fill="#f0b070"/>
+        <!-- Head tilted forward -->
+        <ellipse cx="215" cy="234" rx="46" ry="48" fill="#f5be80"/>
+        <ellipse cx="215" cy="194" rx="46" ry="24" fill="#3a2000"/>
+        <!-- Eyes focused at screen -->
+        <ellipse cx="197" cy="232" rx="11" ry="10" fill="white"/>
+        <ellipse cx="233" cy="232" rx="11" ry="10" fill="white"/>
+        <circle cx="200" cy="233" r="7" fill="#3a2000"/>
+        <circle cx="236" cy="233" r="7" fill="#3a2000"/>
+        <circle cx="202" cy="231" r="3" fill="#111"/>
+        <circle cx="238" cy="231" r="3" fill="#111"/>
+        <!-- Focused brows -->
+        <path d="M186 220 Q197 215 208 220" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M222 220 Q233 215 244 220" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- Small smile concentration -->
+        <path d="M202 254 Q215 260 228 254" stroke="#a06040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Neck -->
+        <ellipse cx="215" cy="272" rx="24" ry="16" fill="#f0b070"/>
+      </g>
+
+      <!-- Screen glow on face -->
+      <ellipse cx="215" cy="230" rx="55" ry="55" fill="rgba(0,120,255,0.08)"/>
+
+      <!-- Floating text bits -->
+      <text x="40" y="200" font-family="Bangers, cursive" font-size="14" fill="#44aaff" opacity="0.6" transform="rotate(-15 40 200)">CALORIES!</text>
+      <text x="380" y="190" font-family="Bangers, cursive" font-size="14" fill="#ff8844" opacity="0.6" transform="rotate(10 380 190)">MACROS!</text>
+      <text x="50" y="310" font-family="Bangers, cursive" font-size="12" fill="#44ff88" opacity="0.6" transform="rotate(-8 50 310)">DEFICIT!</text>
+    </svg>
+
+    <div class="caption">
+      <p>Eyes glued to the screen, furiously researching. Hours blur into each other. The science of fat loss begins to unfold before him.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PANEL 4 ═══════════════════════ -->
+<div class="panel panel-4">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">4</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label">THE SCIENCE</h2>
+
+    <div class="research-grid">
+
+      <!-- Card 1: TDEE -->
+      <div class="research-card">
+        <span class="card-icon">🔥</span>
+        <div class="card-title">1. Find Your TDEE</div>
+        <div class="card-body">
+          Total Daily Energy Expenditure — the total calories your body burns in a day. Calculated using your Basal Metabolic Rate (BMR) multiplied by your activity factor.
+          <br/>
+          <span class="card-highlight">BMR × Activity = TDEE</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Activity Level -->
+      <div class="research-card">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">2. Estimate Activity Level</div>
+        <div class="card-body">
+          Sedentary (×1.2) → Lightly active (×1.375) → Moderately active (×1.55) → Very active (×1.725). Be honest — most people overestimate their activity level.
+          <br/>
+          <span class="card-highlight">Honest assessment = accurate TDEE</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Calorie Deficit -->
+      <div class="research-card">
+        <span class="card-icon">📉</span>
+        <div class="card-title">3. Calorie Deficit</div>
+        <div class="card-body">
+          Target 500–700 calories below your TDEE daily. This creates a sustainable fat loss of approximately 0.5–0.7 kg (1–1.5 lbs) per week without destroying muscle.
+          <br/>
+          <span class="card-highlight">TDEE − 500 to 700 = Daily Goal</span>
+        </div>
+      </div>
+
+      <!-- Card 4: First Law -->
+      <div class="research-card">
+        <span class="card-icon">⚖️</span>
+        <div class="card-title">4. First Law of Thermodynamics</div>
+        <div class="card-body">
+          Energy cannot be created or destroyed — only converted. Eat less energy than you burn, and your body <em>must</em> tap into stored fat. Physics doesn't lie.
+          <br/>
+          <span class="card-highlight">Energy in &lt; Energy out → Fat loss</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PANEL 5 ═══════════════════════ -->
+<div class="panel panel-5">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">5</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label">THE WEAPON</h2>
+
+    <svg class="illustration" viewBox="0 0 460 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="shopGlow" cx="50%" cy="40%">
+          <stop offset="0%" stop-color="#aa44ff" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="scaleShadow">
+          <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000" flood-opacity="0.8"/>
+        </filter>
+      </defs>
+      <ellipse cx="230" cy="220" rx="200" ry="180" fill="url(#shopGlow)"/>
+
+      <!-- Floor -->
+      <rect x="60" y="380" width="340" height="40" rx="0" fill="rgba(0,0,0,0.3)"/>
+
+      <!-- Food Scale — the hero item -->
+      <g filter="url(#scaleShadow)">
+        <!-- Scale platform/base -->
+        <ellipse cx="230" cy="370" rx="85" ry="18" fill="#9944cc"/>
+        <ellipse cx="230" cy="365" rx="85" ry="18" fill="#bb66ee"/>
+        <!-- Scale body -->
+        <rect x="150" y="280" width="160" height="88" rx="12" fill="#cc88ff"/>
+        <rect x="154" y="284" width="152" height="80" rx="10" fill="#dd99ff"/>
+        <!-- Display screen -->
+        <rect x="170" y="296" width="120" height="50" rx="8" fill="#001a00"/>
+        <rect x="174" y="300" width="112" height="42" rx="6" fill="#002200"/>
+        <text x="230" y="322" text-anchor="middle" font-family="monospace" font-size="22" fill="#00ff44" font-weight="bold">0.00g</text>
+        <text x="230" y="338" text-anchor="middle" font-family="monospace" font-size="8" fill="#44aa44">TARE / KG / LB</text>
+        <!-- Buttons -->
+        <rect x="168" y="352" width="36" height="12" rx="4" fill="#9933cc"/>
+        <rect x="212" y="352" width="36" height="12" rx="4" fill="#9933cc"/>
+        <rect x="256" y="352" width="36" height="12" rx="4" fill="#9933cc"/>
+        <text x="186" y="362" text-anchor="middle" font-family="monospace" font-size="8" fill="white">TARE</text>
+        <text x="230" y="362" text-anchor="middle" font-family="monospace" font-size="8" fill="white">ON/OFF</text>
+        <text x="274" y="362" text-anchor="middle" font-family="monospace" font-size="8" fill="white">UNIT</text>
+        <!-- Scale tray on top -->
+        <ellipse cx="230" cy="278" rx="85" ry="14" fill="#eeddff"/>
+        <ellipse cx="230" cy="274" rx="85" ry="14" fill="white"/>
+        <ellipse cx="230" cy="272" rx="82" ry="10" fill="#f5f0ff"/>
+        <!-- Shine -->
+        <ellipse cx="200" cy="268" rx="20" ry="4" fill="rgba(255,255,255,0.6)" transform="rotate(-15 200 268)"/>
+      </g>
+
+      <!-- Price tag -->
+      <g class="price-tag">
+        <line x1="310" y1="240" x2="310" y2="120" stroke="#ffcc44" stroke-width="2" stroke-dasharray="4,4"/>
+        <rect x="270" y="90" width="82" height="48" rx="8" fill="#ffdd44"/>
+        <circle cx="311" cy="90" r="5" fill="#cc8800" stroke="#aa6600" stroke-width="2"/>
+        <text x="311" y="112" text-anchor="middle" font-family="Bangers, cursive" font-size="16" fill="#333">$19.99</text>
+        <text x="311" y="128" text-anchor="middle" font-family="Comic Neue, sans-serif" font-size="9" fill="#555" font-weight="bold">FOOD SCALE</text>
+      </g>
+
+      <!-- Boy walking in triumphant -->
+      <g filter="url(#shadow)">
+        <ellipse cx="100" cy="415" rx="52" ry="10" fill="rgba(0,0,0,0.4)"/>
+        <!-- Legs walking -->
+        <ellipse cx="85" cy="377" rx="22" ry="42" fill="#f0b070" transform="rotate(10 85 377)"/>
+        <ellipse cx="115" cy="385" rx="22" ry="42" fill="#e8a060" transform="rotate(-15 115 385)"/>
+        <ellipse cx="80" cy="412" rx="28" ry="12" fill="#333"/>
+        <ellipse cx="122" cy="416" rx="28" ry="12" fill="#222"/>
+        <!-- Body -->
+        <ellipse cx="100" cy="310" rx="52" ry="65" fill="#f0b070"/>
+        <ellipse cx="100" cy="298" rx="50" ry="54" fill="#2255aa"/>
+        <ellipse cx="100" cy="358" rx="46" ry="20" fill="#f0b070"/>
+        <rect x="56" y="350" width="88" height="14" rx="5" fill="#553300"/>
+        <!-- Arm pointing at scale excited -->
+        <path d="M148 290 Q175 270 200 268" stroke="#f0b070" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <circle cx="202" cy="268" r="14" fill="#f0b070"/>
+        <!-- Other arm -->
+        <ellipse cx="52" cy="300" rx="18" ry="42" fill="#f0b070" transform="rotate(15 52 300)"/>
+        <circle cx="54" cy="340" r="14" fill="#f0b070"/>
+        <!-- Neck -->
+        <ellipse cx="100" cy="245" rx="26" ry="16" fill="#f0b070"/>
+        <!-- Head -->
+        <ellipse cx="100" cy="197" rx="50" ry="52" fill="#f5be80"/>
+        <ellipse cx="100" cy="152" rx="50" ry="24" fill="#3a2000"/>
+        <ellipse cx="55" cy="168" rx="18" ry="32" fill="#3a2000"/>
+        <ellipse cx="145" cy="168" rx="18" ry="32" fill="#3a2000"/>
+        <!-- Eyes excited wide -->
+        <ellipse cx="83" cy="196" rx="13" ry="14" fill="white"/>
+        <ellipse cx="117" cy="196" rx="13" ry="14" fill="white"/>
+        <circle cx="85" cy="196" r="9" fill="#3a2000"/>
+        <circle cx="119" cy="196" r="9" fill="#3a2000"/>
+        <circle cx="87" cy="193" r="4" fill="#111"/>
+        <circle cx="121" cy="193" r="4" fill="#111"/>
+        <!-- Eyebrows high excited -->
+        <path d="M72 181 Q83 174 94 180" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M106 180 Q117 174 128 181" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- Big smile -->
+        <path d="M80 218 Q100 238 120 218" stroke="#a06040" stroke-width="3" fill="rgba(255,160,120,0.4)" stroke-linecap="round"/>
+        <!-- Cheeks -->
+        <ellipse cx="68" cy="208" rx="14" ry="10" fill="rgba(255,120,80,0.4)"/>
+        <ellipse cx="132" cy="208" rx="14" ry="10" fill="rgba(255,120,80,0.4)"/>
+      </g>
+
+      <!-- Stars of excitement -->
+      <text x="200" y="200" font-family="Bangers, cursive" font-size="22" fill="#ffdd00" opacity="0.9">★</text>
+      <text x="155" y="170" font-family="Bangers, cursive" font-size="16" fill="#ffdd00" opacity="0.7">✦</text>
+      <text x="165" y="230" font-family="Bangers, cursive" font-size="18" fill="#ffdd00" opacity="0.8">✦</text>
+    </svg>
+
+    <div class="caption">
+      <p>He marches into the store with PURPOSE. The humble food scale — a tiny device that will become his most powerful weapon against fat.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PANEL 6 ═══════════════════════ -->
+<div class="panel panel-6">
+  <div class="speed-lines"></div>
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">6</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label">THE DISCIPLINE</h2>
+
+    <svg class="illustration" viewBox="0 0 460 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="kitchenGlow" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#ffaa00" stop-opacity="0.2"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="230" cy="220" rx="200" ry="180" fill="url(#kitchenGlow)"/>
+
+      <!-- Kitchen counter -->
+      <rect x="50" y="330" width="360" height="20" rx="0" fill="#7a5a2a"/>
+      <rect x="50" y="348" width="360" height="60" fill="#6a4a1a"/>
+      <!-- Counter top surface -->
+      <rect x="50" y="325" width="360" height="10" rx="2" fill="#9a7a3a"/>
+
+      <!-- FOOD SCALE on counter -->
+      <g>
+        <ellipse cx="230" cy="330" rx="55" ry="10" fill="#9944cc"/>
+        <rect x="180" y="280" width="100" height="52" rx="8" fill="#dd99ff"/>
+        <rect x="184" y="284" width="92" height="38" rx="6" fill="#001a00"/>
+        <text x="230" y="308" text-anchor="middle" font-family="monospace" font-size="18" fill="#00ff44" font-weight="bold">247g</text>
+        <text x="230" y="320" text-anchor="middle" font-family="monospace" font-size="7" fill="#44aa44">CALORIES: 382</text>
+        <ellipse cx="230" cy="278" rx="55" ry="9" fill="white"/>
+        <ellipse cx="230" cy="276" rx="53" ry="8" fill="#f5f0ff"/>
+      </g>
+
+      <!-- Food items being measured -->
+      <!-- Chicken breast on scale -->
+      <g class="food-item">
+        <ellipse cx="220" cy="270" rx="42" ry="18" fill="#e8a060" transform="rotate(-5 220 270)"/>
+        <ellipse cx="218" cy="265" rx="38" ry="14" fill="#f0b870" transform="rotate(-5 218 265)"/>
+        <!-- Texture -->
+        <path d="M200 268 Q215 260 238 265 Q225 270 205 275 Z" fill="rgba(255,200,100,0.3)"/>
+      </g>
+
+      <!-- Rice bowl nearby -->
+      <g class="food-item" style="animation-delay: 0.5s">
+        <ellipse cx="340" cy="318" rx="38" ry="20" fill="#ddbb88"/>
+        <ellipse cx="340" cy="312" rx="36" ry="14" fill="#eeccaa"/>
+        <!-- Rice texture -->
+        <circle cx="330" cy="310" r="3" fill="white" opacity="0.6"/>
+        <circle cx="340" cy="308" r="3" fill="white" opacity="0.6"/>
+        <circle cx="350" cy="311" r="3" fill="white" opacity="0.6"/>
+        <circle cx="335" cy="315" r="3" fill="white" opacity="0.6"/>
+        <circle cx="345" cy="313" r="3" fill="white" opacity="0.6"/>
+      </g>
+
+      <!-- Broccoli -->
+      <g class="food-item" style="animation-delay: 1s">
+        <rect x="100" y="296" width="8" height="34" rx="3" fill="#3a8a00"/>
+        <circle cx="104" cy="290" r="14" fill="#44aa00"/>
+        <circle cx="95" cy="295" r="11" fill="#55bb11"/>
+        <circle cx="113" cy="295" r="11" fill="#44aa00"/>
+        <circle cx="104" cy="281" r="9" fill="#66cc22"/>
+      </g>
+
+      <!-- Phone with app showing calories -->
+      <g>
+        <rect x="360" y="248" width="56" height="90" rx="8" fill="#222"/>
+        <rect x="363" y="252" width="50" height="78" rx="6" fill="#001a2e"/>
+        <text x="388" y="272" text-anchor="middle" font-family="monospace" font-size="7" fill="#44aaff">MyFitnessPal</text>
+        <rect x="365" y="278" width="46" height="5" rx="2" fill="#44ff88" opacity="0.8"/>
+        <text x="388" y="292" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.7)">Remaining:</text>
+        <text x="388" y="305" text-anchor="middle" font-family="monospace" font-size="11" fill="#44ff88" font-weight="bold">1,648</text>
+        <text x="388" y="316" text-anchor="middle" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.5)">kcal left</text>
+        <circle cx="388" cy="328" r="4" fill="#333"/>
+      </g>
+
+      <!-- Boy measuring carefully -->
+      <g filter="url(#shadow)">
+        <ellipse cx="120" cy="415" rx="55" ry="10" fill="rgba(0,0,0,0.4)"/>
+        <!-- Legs -->
+        <ellipse cx="100" cy="385" rx="24" ry="38" fill="#f0b070"/>
+        <ellipse cx="140" cy="390" rx="24" ry="38" fill="#e8a060"/>
+        <ellipse cx="94" cy="415" rx="30" ry="12" fill="#333"/>
+        <ellipse cx="146" cy="416" rx="30" ry="12" fill="#222"/>
+        <!-- Body less fat now — slight progress -->
+        <ellipse cx="120" cy="318" rx="55" ry="68" fill="#f0b070"/>
+        <ellipse cx="120" cy="306" rx="52" ry="56" fill="#336622"/>
+        <ellipse cx="120" cy="368" rx="48" ry="20" fill="#f0b070"/>
+        <rect x="74" y="360" width="92" height="14" rx="5" fill="#553300"/>
+        <!-- Arm extended placing food on scale -->
+        <path d="M170 305 Q210 298 225 285" stroke="#f0b070" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <circle cx="227" cy="283" r="14" fill="#f0b070"/>
+        <!-- Other arm with phone -->
+        <path d="M68" cy="310" Q48" cy="290" 48" cy="260" stroke="#f0b070" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <path d="M68 310 Q48 285 50 258" stroke="#f0b070" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <circle cx="50" cy="256" r="14" fill="#f0b070"/>
+        <!-- Neck -->
+        <ellipse cx="120" cy="248" rx="28" ry="18" fill="#f0b070"/>
+        <!-- Head -->
+        <ellipse cx="120" cy="200" rx="52" ry="54" fill="#f5be80"/>
+        <ellipse cx="120" cy="154" rx="52" ry="24" fill="#3a2000"/>
+        <ellipse cx="72" cy="172" rx="18" ry="32" fill="#3a2000"/>
+        <ellipse cx="168" cy="172" rx="18" ry="32" fill="#3a2000"/>
+        <!-- Eyes focused and determined -->
+        <ellipse cx="102" cy="200" rx="13" ry="12" fill="white"/>
+        <ellipse cx="138" cy="200" rx="13" ry="12" fill="white"/>
+        <circle cx="105" cy="201" r="8" fill="#3a2000"/>
+        <circle cx="141" cy="201" r="8" fill="#3a2000"/>
+        <circle cx="107" cy="199" r="3.5" fill="#111"/>
+        <circle cx="143" cy="199" r="3.5" fill="#111"/>
+        <!-- Focused brows -->
+        <path d="M90 186 Q102 180 114 186" stroke="#3a2000" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <path d="M126 186 Q138 180 150 186" stroke="#3a2000" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- Tight-lipped smile of concentration -->
+        <path d="M105 224 Q120 230 135 224" stroke="#a06040" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="85" cy="214" rx="14" ry="9" fill="rgba(255,120,80,0.3)"/>
+        <ellipse cx="155" cy="214" rx="14" ry="9" fill="rgba(255,120,80,0.3)"/>
+      </g>
+
+      <!-- Floating calorie numbers -->
+      <text x="305" y="240" font-family="Bangers, cursive" font-size="20" fill="#ffcc44" opacity="0.9" class="number-count">247 cal</text>
+      <text x="50" y="265" font-family="Bangers, cursive" font-size="16" fill="#ff8844" opacity="0.8" class="number-count" style="animation-delay:0.7s">38g protein</text>
+    </svg>
+
+    <div class="caption">
+      <p>Every gram. Every meal. Every single day. No guessing — ONLY precision. This is the discipline that separates dreamers from doers.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PANEL 7 ═══════════════════════ -->
+<div class="panel panel-7">
+  <div class="vignette"></div>
+  <div class="halftone"></div>
+  <div class="panel-badge">7</div>
+
+  <div class="panel-inner">
+    <h2 class="scene-label" style="font-size: clamp(2.5rem, 8vw, 5.5rem);">TRANSFORMED!</h2>
+
+    <svg class="illustration" viewBox="0 0 460 440" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="victoryGlow" cx="50%" cy="40%">
+          <stop offset="0%" stop-color="#00ff88" stop-opacity="0.4"/>
+          <stop offset="40%" stop-color="#00cc44" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <filter id="heroGlow">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Victory BG rays -->
+      <g opacity="0.2">
+        <line x1="230" y1="200" x2="30" y2="0" stroke="#44ff88" stroke-width="40"/>
+        <line x1="230" y1="200" x2="120" y2="0" stroke="#44ff88" stroke-width="30"/>
+        <line x1="230" y1="200" x2="230" y2="0" stroke="#44ff88" stroke-width="25"/>
+        <line x1="230" y1="200" x2="340" y2="0" stroke="#44ff88" stroke-width="30"/>
+        <line x1="230" y1="200" x2="430" y2="0" stroke="#44ff88" stroke-width="40"/>
+        <line x1="230" y1="200" x2="30" y2="440" stroke="#44ff88" stroke-width="30"/>
+        <line x1="230" y1="200" x2="430" y2="440" stroke="#44ff88" stroke-width="30"/>
+      </g>
+
+      <ellipse cx="230" cy="220" rx="180" ry="180" fill="url(#victoryGlow)"/>
+
+      <!-- Energy rings -->
+      <circle cx="230" cy="220" r="120" fill="none" stroke="#44ff88" stroke-width="3" class="energy-ring"/>
+      <circle cx="230" cy="220" r="90" fill="none" stroke="#44ff88" stroke-width="2" class="energy-ring" style="animation-delay:0.6s"/>
+
+      <!-- Sparkles -->
+      <g class="sparkle"><text x="100" y="120" font-size="28" fill="#ffdd00">✦</text></g>
+      <g class="sparkle"><text x="330" y="100" font-size="24" fill="#ffdd00">✦</text></g>
+      <g class="sparkle"><text x="60" y="260" font-size="20" fill="#44ff88">★</text></g>
+      <g class="sparkle"><text x="370" y="240" font-size="22" fill="#44ff88">★</text></g>
+
+      <!-- SLIM BOY — triumphant pose -->
+      <g class="slim-boy" filter="url(#heroGlow)">
+        <ellipse cx="230" cy="435" rx="80" ry="12" fill="rgba(0,0,0,0.4)"/>
+        <!-- Legs slim -->
+        <ellipse cx="205" cy="380" rx="20" ry="52" fill="#f0b070"/>
+        <ellipse cx="255" cy="380" rx="20" ry="52" fill="#e8a060"/>
+        <ellipse cx="200" cy="424" rx="28" ry="12" fill="#333"/>
+        <ellipse cx="260" cy="424" rx="28" ry="12" fill="#222"/>
+        <!-- Body slim torso -->
+        <ellipse cx="230" cy="308" rx="40" ry="72" fill="#f0b070"/>
+        <ellipse cx="230" cy="296" rx="38" ry="58" fill="#22aa44"/>
+        <!-- No belly bulge — flat! -->
+        <ellipse cx="230" cy="358" rx="34" ry="16" fill="#f0b070"/>
+        <rect x="196" y="352" width="68" height="12" rx="5" fill="#553300"/>
+        <!-- Belt buckle bling -->
+        <rect x="222" y="354" width="16" height="10" rx="3" fill="#ffcc00"/>
+        <!-- Arms raised in triumph -->
+        <path d="M192 280 Q155 240 140 200" stroke="#f0b070" stroke-width="22" fill="none" stroke-linecap="round"/>
+        <circle cx="138" cy="196" r="18" fill="#f0b070"/>
+        <path d="M268 280 Q305 240 320 200" stroke="#f0b070" stroke-width="22" fill="none" stroke-linecap="round"/>
+        <circle cx="322" cy="196" r="18" fill="#f0b070"/>
+        <!-- Hands open/fists up -->
+        <!-- Left fist -->
+        <rect x="126" y="182" width="26" height="22" rx="8" fill="#f0b070"/>
+        <!-- Right fist -->
+        <rect x="308" y="182" width="26" height="22" rx="8" fill="#f0b070"/>
+        <!-- Neck slim -->
+        <rect x="216" y="224" width="28" height="24" rx="10" fill="#f0b070"/>
+        <!-- Head -->
+        <ellipse cx="230" cy="192" rx="54" ry="56" fill="#f5be80"/>
+        <ellipse cx="230" cy="144" rx="54" ry="26" fill="#3a2000"/>
+        <ellipse cx="180" cy="162" rx="18" ry="30" fill="#3a2000"/>
+        <ellipse cx="280" cy="162" rx="18" ry="30" fill="#3a2000"/>
+        <!-- Hair spiky victory style -->
+        <polygon points="215,136 220,118 225,136" fill="#3a2000"/>
+        <polygon points="225,134 230,112 235,134" fill="#3a2000"/>
+        <polygon points="235,136 240,118 245,136" fill="#3a2000"/>
+        <!-- Eyes shining happy -->
+        <ellipse cx="210" cy="190" rx="14" ry="13" fill="white"/>
+        <ellipse cx="250" cy="190" rx="14" ry="13" fill="white"/>
+        <circle cx="212" cy="190" r="9" fill="#3a2000"/>
+        <circle cx="252" cy="190" r="9" fill="#3a2000"/>
+        <!-- Shine in eyes -->
+        <circle cx="215" cy="186" r="4" fill="#111"/>
+        <circle cx="255" cy="186" r="4" fill="#111"/>
+        <circle cx="217" cy="184" r="2" fill="white" opacity="0.8"/>
+        <circle cx="257" cy="184" r="2" fill="white" opacity="0.8"/>
+        <!-- Happy brows raised -->
+        <path d="M197 173 Q210 166 223 172" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M237 172 Q250 166 263 173" stroke="#3a2000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- BIG SMILE -->
+        <path d="M206 218 Q230 240 254 218" stroke="#a06040" stroke-width="3" fill="rgba(255,160,120,0.5)" stroke-linecap="round"/>
+        <!-- Cheeks happy -->
+        <ellipse cx="185" cy="204" rx="16" ry="12" fill="rgba(255,120,80,0.4)"/>
+        <ellipse cx="275" cy="204" rx="16" ry="12" fill="rgba(255,120,80,0.4)"/>
+        <!-- Teeth showing -->
+        <path d="M210 222 Q230 234 250 222" fill="white"/>
+      </g>
+
+      <!-- Before/After weight labels -->
+      <g>
+        <rect x="30" y="340" width="90" height="52" rx="10" fill="rgba(255,50,50,0.15)" stroke="rgba(255,100,100,0.4)" stroke-width="2"/>
+        <text x="75" y="362" text-anchor="middle" font-family="Bangers, cursive" font-size="14" fill="#ff6666">BEFORE</text>
+        <text x="75" y="380" text-anchor="middle" font-family="Bangers, cursive" font-size="20" fill="#ff4444">98 kg</text>
+        <!-- arrow -->
+        <text x="140" y="370" text-anchor="middle" font-family="Bangers, cursive" font-size="28" fill="#ffcc44">→</text>
+        <!-- After -->
+        <rect x="340" y="340" width="90" height="52" rx="10" fill="rgba(0,255,100,0.15)" stroke="rgba(0,255,100,0.4)" stroke-width="2"/>
+        <text x="385" y="362" text-anchor="middle" font-family="Bangers, cursive" font-size="14" fill="#44ff88">AFTER</text>
+        <text x="385" y="380" text-anchor="middle" font-family="Bangers, cursive" font-size="20" fill="#44ff88">74 kg</text>
+      </g>
+
+      <!-- Celebration text burst -->
+      <text x="230" y="72" text-anchor="middle" font-family="Bangers, cursive" font-size="26" fill="#ffdd00" opacity="0.95" style="text-shadow: 0 0 20px rgba(255,220,0,0.8)">−24 KG! 🔥</text>
+    </svg>
+
+    <div class="caption" style="background: rgba(0,50,20,0.8); border-color: #44ff88; max-width: 680px;">
+      <p>Months of discipline. Months of weighing, tracking, and trusting the science. The boy is <strong style="color:#44ff88">UNRECOGNIZABLE</strong> — lighter, stronger, and absolutely ALIVE. The physics never lied.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<div style="background: #0a0a0a; padding: 60px 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1);">
+  <p style="font-family: 'Bangers', cursive; font-size: 1.8rem; color: rgba(255,255,255,0.6); letter-spacing: 4px;">THE END</p>
+  <p style="font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: rgba(255,255,255,0.3); margin-top: 12px; letter-spacing: 2px;">EAT IN A DEFICIT · TRUST THE SCIENCE · STAY CONSISTENT</p>
+  <p style="font-family: 'Comic Neue', sans-serif; font-size: 0.75rem; color: rgba(255,255,255,0.2); margin-top: 20px;">Consult a healthcare professional before starting any weight loss program.</p>
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = (scrollTop / docHeight) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  });
+
+  // Intersection observer for panel entrance animations
+  const panels = document.querySelectorAll('.panel');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  panels.forEach(panel => {
+    panel.style.opacity = '0';
+    panel.style.transform = 'translateY(30px)';
+    panel.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(panel);
+  });
+</script>
+</body>
+</html>
